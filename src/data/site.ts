@@ -25,6 +25,21 @@ import {
 /** Email publik portofolio — dipakai di About, Contact, Footer, dan form mailto. */
 export const EMAIL = "putrakurniawan@mui.skin";
 
+/* ---------- Gambar ---------- */
+/**
+ * CDN Cloudinary untuk aset thumbnail proyek.
+ * Base URL ini permanen (asset tetap hidup di cloud `dqn8dtntr`),
+ * jadi tidak terpengaruh masa berlaku link halaman koleksi.
+ */
+const CLD = "https://res.cloudinary.com/dqn8dtntr/image/upload";
+const CLD_ID = "v1793714756/file_0000000087c88211825370ba0c077e70_qrz68c";
+
+/** Thumbnail Clouvia AI — sudah dioptimasi (1200px, auto-format, ±90 KB). */
+export const CLOUVIA_THUMB = `${CLD}/c_fill,ar_16:9,g_auto,w_1200,q_auto,f_auto/${CLD_ID}.png`;
+
+/** Versi asli PNG 1672×941 — dipakai bila ingin kualitas penuh. */
+export const CLOUVIA_THUMB_ORIGINAL = `${CLD}/${CLD_ID}.png`;
+
 export interface Profile {
   name: string;
   role: string;
@@ -186,12 +201,15 @@ export const projects: Project[] = [
     index: "01",
     thumb: "thumb-1",
     icon: Sparkles,
-    /* 👇 Ganti dengan screenshot asli Anda:
-       upload file ke public/images/projects/clouvia-ai.png
-       lalu nilai di bawah otomatis terpakai. */
-    image: "images/projects/clouvia-ai.png",
-    fallbackImage:
-      "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=70",
+    /* Screenshot asli di-host di Cloudinary (1672×941, sudah di-crop 16:9
+       & dikompresi otomatis → ±90 KB, jauh lebih ringan dari PNG asli 1.5 MB).
+       Bila suatu saat ingin pindah ke file lokal, cukup ganti nilai `image`
+       menjadi "images/projects/clouvia-ai.png". */
+    image: CLOUVIA_THUMB,
+    /* Cadangan: file lokal di repo. Kalau Anda meng-upload sendiri ke
+       public/images/projects/clouvia-ai.png, gambar itu otomatis terpakai
+       saat CDN Cloudinary tidak bisa diakses. */
+    fallbackImage: "images/projects/clouvia-ai.png",
     thumbRatio: "16 / 9",
     url: "https://clouvia-ai.my.id",
     linkLabel: "Detail proyek",
