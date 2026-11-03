@@ -1,0 +1,26 @@
+{
+  "name": "zxtraporttofolio",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Portofolio Traya Putra — dibangun dengan React, TypeScript (TSX), Vite, dan lucide-react.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "lucide-react": "0.454.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.9.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.3",
+    "typescript": "5.6.3",
+    "vite": "5.4.10"
+  }
+}

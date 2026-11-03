@@ -1,420 +1,46 @@
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Portofolio Traya Putra — Web Developer & UI Engineer. Membangun antarmuka web yang cepat, rapi, dan mudah dipakai." />
-  <meta name="author" content="Traya Putra" />
-  <meta name="theme-color" content="#0b0f19" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portofolio Traya Putra — Web Developer & UI Engineer. Membangun antarmuka web yang cepat, rapi, dan mudah dipakai."
+    />
+    <meta name="author" content="Traya Putra" />
+    <meta name="theme-color" content="#0b0f19" />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Traya Putra — Web Developer & UI Engineer" />
-  <meta property="og:description" content="Portofolio pribadi: proyek, keahlian, dan pengalaman membangun produk web." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Traya Putra — Web Developer & UI Engineer" />
+    <meta
+      property="og:description"
+      content="Portofolio pribadi: proyek, keahlian, dan pengalaman membangun produk web. Dibangun dengan React + TypeScript."
+    />
 
-  <title>Traya Putra — Web Developer &amp; UI Engineer</title>
+    <title>Traya Putra — Web Developer &amp; UI Engineer</title>
 
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-</head>
-<body>
-  <a class="skip-link" href="#main">Lewati ke konten utama</a>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Progress bar -->
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-
-  <!-- ============ NAVBAR ============ -->
-  <header class="site-header" id="siteHeader">
-    <nav class="nav container" aria-label="Navigasi utama">
-      <a class="brand" href="#hero" aria-label="Beranda">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
-            <rect x="2" y="2" width="28" height="28" rx="9" fill="url(#g1)" />
-            <path d="M10 11h12M16 11v11" stroke="#0b0f19" stroke-width="3" stroke-linecap="round" />
-            <defs>
-              <linearGradient id="g1" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#5eead4" />
-                <stop offset="1" stop-color="#818cf8" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </span>
-        <span class="brand-text">traya<span class="dot">.</span>dev</span>
-      </a>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about" class="nav-link">Tentang</a></li>
-        <li><a href="#skills" class="nav-link">Keahlian</a></li>
-        <li><a href="#projects" class="nav-link">Proyek</a></li>
-        <li><a href="#experience" class="nav-link">Pengalaman</a></li>
-        <li><a href="#contact" class="nav-link">Kontak</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Ganti tema" title="Ganti tema">
-          <svg class="ico-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
-          </svg>
-          <svg class="ico-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" />
-          </svg>
-        </button>
-
-        <button class="nav-toggle" id="navToggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="navLinks">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </nav>
-  </header>
-
-  <main id="main">
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="hero">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <p class="badge" data-reveal>
-            <span class="pulse" aria-hidden="true"></span>
-            Tersedia untuk proyek freelance
-          </p>
-
-          <h1 class="hero-title" data-reveal>
-            Halo, saya <span class="grad">Traya Putra</span><br />
-            saya membangun <span class="type-wrap"><span id="typed" class="typed"></span><span class="caret" aria-hidden="true"></span></span>
-          </h1>
-
-          <p class="hero-sub" data-reveal>
-            Web developer yang fokus pada antarmuka cepat, aksesibel, dan enak dipakai.
-            Suka merapikan detail kecil sampai produk terasa <em>mulus</em>.
-          </p>
-
-          <div class="hero-cta" data-reveal>
-            <a class="btn btn-primary" href="#projects">
-              Lihat Proyek
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </a>
-            <a class="btn btn-ghost" href="#contact">Hubungi Saya</a>
-          </div>
-
-          <dl class="hero-stats" data-reveal>
-            <div><dt>Pengalaman</dt><dd><span class="count" data-count="4">0</span>+ tahun</dd></div>
-            <div><dt>Proyek</dt><dd><span class="count" data-count="28">0</span>+ selesai</dd></div>
-            <div><dt>Fokus</dt><dd>Frontend &amp; DX</dd></div>
-          </dl>
-        </div>
-
-        <div class="hero-visual" data-reveal>
-          <div class="code-card" id="codeCard">
-            <div class="code-top">
-              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-              <span class="code-name">profile.js</span>
-            </div>
-            <pre class="code-body"><code><span class="c-key">const</span> <span class="c-var">me</span> = {
-  <span class="c-prop">nama</span>: <span class="c-str">"Traya Putra"</span>,
-  <span class="c-prop">peran</span>: <span class="c-str">"Web Developer"</span>,
-  <span class="c-prop">stack</span>: [<span class="c-str">"JS"</span>, <span class="c-str">"React"</span>, <span class="c-str">"Node"</span>],
-  <span class="c-prop">sifat</span>: <span class="c-str">"detail-oriented"</span>,
-  <span class="c-fn">bisa</span>() {
-    <span class="c-key">return</span> <span class="c-str">"kirim kopi ☕ lalu ngoding"</span>;
-  }
-};</code></pre>
-          </div>
-          <div class="float-chip chip-1">⚡ Fast by default</div>
-          <div class="float-chip chip-2">♿ A11y first</div>
-        </div>
-      </div>
-
-      <a class="scroll-hint" href="#about" aria-label="Gulir ke bawah">
-        <span></span>
-      </a>
-    </section>
-
-    <!-- ============ ABOUT ============ -->
-    <section class="section" id="about">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">01 — Tentang</p>
-          <h2 class="section-title">Sedikit cerita tentang saya</h2>
-        </div>
-
-        <div class="about-grid">
-          <div class="about-text" data-reveal>
-            <p>
-              Saya developer yang senang mengubah desain menjadi antarmuka nyata yang terasa ringan.
-              Mulai dari struktur HTML yang semantik, CSS yang tertata, sampai JavaScript yang tidak
-              membuat browser menangis.
-            </p>
-            <p>
-              Saya percaya produk bagus lahir dari detail: waktu muat yang cepat, navigasi keyboard
-              yang jelas, dan mikro-interaksi yang membuat pengguna paham apa yang sedang terjadi.
-            </p>
-            <ul class="about-list">
-              <li><span aria-hidden="true">▹</span> Fokus pada performa &amp; Core Web Vitals</li>
-              <li><span aria-hidden="true">▹</span> Kolaborasi erat dengan desainer &amp; produk</li>
-              <li><span aria-hidden="true">▹</span> Kode rapi, terdokumentasi, mudah dilanjutkan</li>
-            </ul>
-          </div>
-
-          <aside class="about-card" data-reveal>
-            <div class="avatar" aria-hidden="true">TP</div>
-            <h3>Traya Putra</h3>
-            <p class="muted">Web Developer &amp; UI Engineer</p>
-            <ul class="about-facts">
-              <li><span>Lokasi</span><strong>Indonesia</strong></li>
-              <li><span>Bahasa</span><strong>ID / EN</strong></li>
-              <li><span>Status</span><strong class="ok">Open to work</strong></li>
-            </ul>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ SKILLS ============ -->
-    <section class="section section-alt" id="skills">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">02 — Keahlian</p>
-          <h2 class="section-title">Tools yang saya pakai sehari-hari</h2>
-        </div>
-
-        <div class="skills-grid">
-          <article class="skill-card" data-reveal>
-            <div class="skill-ico" aria-hidden="true">🎨</div>
-            <h3>Frontend</h3>
-            <p>HTML semantik, CSS modern, JavaScript, React, aksesibilitas.</p>
-            <div class="bar"><span style="--v: 95%"></span></div>
-            <small>95%</small>
-          </article>
-
-          <article class="skill-card" data-reveal>
-            <div class="skill-ico" aria-hidden="true">⚙️</div>
-            <h3>Backend</h3>
-            <p>Node.js, Express, REST API, autentikasi, integrasi database.</p>
-            <div class="bar"><span style="--v: 80%"></span></div>
-            <small>80%</small>
-          </article>
-
-          <article class="skill-card" data-reveal>
-            <div class="skill-ico" aria-hidden="true">🧩</div>
-            <h3>UI / UX</h3>
-            <p>Design system, prototyping, responsif, mikro-interaksi.</p>
-            <div class="bar"><span style="--v: 85%"></span></div>
-            <small>85%</small>
-          </article>
-
-          <article class="skill-card" data-reveal>
-            <div class="skill-ico" aria-hidden="true">🚀</div>
-            <h3>DevOps</h3>
-            <p>Git, CI/CD, deployment statis, optimasi build &amp; caching.</p>
-            <div class="bar"><span style="--v: 75%"></span></div>
-            <small>75%</small>
-          </article>
-        </div>
-
-        <ul class="chips" data-reveal aria-label="Teknologi">
-          <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>TypeScript</li><li>React</li>
-          <li>Vite</li><li>Node.js</li><li>Tailwind</li><li>Git</li><li>Figma</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ============ PROJECTS ============ -->
-    <section class="section" id="projects">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">03 — Proyek</p>
-          <h2 class="section-title">Beberapa yang saya banggakan</h2>
-        </div>
-
-        <div class="filter" data-reveal role="tablist" aria-label="Filter proyek">
-          <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true" type="button">Semua</button>
-          <button class="filter-btn" data-filter="web" role="tab" aria-selected="false" type="button">Web App</button>
-          <button class="filter-btn" data-filter="ui" role="tab" aria-selected="false" type="button">UI / Design</button>
-          <button class="filter-btn" data-filter="tool" role="tab" aria-selected="false" type="button">Tools</button>
-        </div>
-
-        <div class="projects" id="projectGrid">
-          <article class="project" data-cat="web" data-reveal>
-            <div class="thumb thumb-1" aria-hidden="true"><span>01</span></div>
-            <div class="project-body">
-              <div class="project-head">
-                <h3>KasirKu</h3>
-                <span class="tag">Web App</span>
-              </div>
-              <p>Aplikasi kasir ringan untuk UMKM: transaksi, stok, dan laporan harian dalam satu dashboard.</p>
-              <ul class="tech"><li>React</li><li>Express</li><li>SQLite</li></ul>
-              <a class="link-arrow" href="#contact">Detail <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="project" data-cat="ui" data-reveal>
-            <div class="thumb thumb-2" aria-hidden="true"><span>02</span></div>
-            <div class="project-body">
-              <div class="project-head">
-                <h3>Aurora Design System</h3>
-                <span class="tag">UI Kit</span>
-              </div>
-              <p>Komponen UI yang konsisten, token warna, dan dokumentasi interaktif untuk tim produk.</p>
-              <ul class="tech"><li>Figma</li><li>CSS Vars</li><li>Storybook</li></ul>
-              <a class="link-arrow" href="#contact">Detail <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="project" data-cat="tool" data-reveal>
-            <div class="thumb thumb-3" aria-hidden="true"><span>03</span></div>
-            <div class="project-body">
-              <div class="project-head">
-                <h3>BundleLens</h3>
-                <span class="tag">Tool</span>
-              </div>
-              <p>CLI kecil untuk memantau ukuran bundle dan memberi peringatan saat melebihi budget.</p>
-              <ul class="tech"><li>Node.js</li><li>esbuild</li><li>CLI</li></ul>
-              <a class="link-arrow" href="#contact">Detail <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="project" data-cat="web" data-reveal>
-            <div class="thumb thumb-4" aria-hidden="true"><span>04</span></div>
-            <div class="project-body">
-              <div class="project-head">
-                <h3>Catatan Belajar</h3>
-                <span class="tag">Web App</span>
-              </div>
-              <p>PWA untuk mencatat materi belajar, dengan pencarian cepat dan mode offline penuh.</p>
-              <ul class="tech"><li>Vite</li><li>IndexedDB</li><li>PWA</li></ul>
-              <a class="link-arrow" href="#contact">Detail <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="project" data-cat="ui" data-reveal>
-            <div class="thumb thumb-5" aria-hidden="true"><span>05</span></div>
-            <div class="project-body">
-              <div class="project-head">
-                <h3>Landing Nusa</h3>
-                <span class="tag">Landing</span>
-              </div>
-              <p>Landing page agensi travel dengan animasi scroll halus dan skor Lighthouse 98.</p>
-              <ul class="tech"><li>HTML</li><li>GSAP</li><li>SEO</li></ul>
-              <a class="link-arrow" href="#contact">Detail <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="project" data-cat="tool" data-reveal>
-            <div class="thumb thumb-6" aria-hidden="true"><span>06</span></div>
-            <div class="project-body">
-              <div class="project-head">
-                <h3>JsonMate</h3>
-                <span class="tag">Tool</span>
-              </div>
-              <p>Formatter &amp; validator JSON di browser, tanpa server, data tetap di perangkat kamu.</p>
-              <ul class="tech"><li>Vanilla JS</li><li>Web API</li></ul>
-              <a class="link-arrow" href="#contact">Detail <span aria-hidden="true">→</span></a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ EXPERIENCE ============ -->
-    <section class="section section-alt" id="experience">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">04 — Pengalaman</p>
-          <h2 class="section-title">Perjalanan singkat</h2>
-        </div>
-
-        <ol class="timeline">
-          <li data-reveal>
-            <div class="tl-dot" aria-hidden="true"></div>
-            <div class="tl-card">
-              <span class="tl-year">2024 — sekarang</span>
-              <h3>Frontend Developer · Freelance</h3>
-              <p>Mengerjakan dashboard internal dan landing page untuk klien UMKM &amp; agensi.</p>
-            </div>
-          </li>
-          <li data-reveal>
-            <div class="tl-dot" aria-hidden="true"></div>
-            <div class="tl-card">
-              <span class="tl-year">2023 — 2024</span>
-              <h3>Web Developer · Studio Kecil</h3>
-              <p>Membangun situs profil perusahaan, migrasi ke komponen modular, dan optimasi performa.</p>
-            </div>
-          </li>
-          <li data-reveal>
-            <div class="tl-dot" aria-hidden="true"></div>
-            <div class="tl-card">
-              <span class="tl-year">2022 — 2023</span>
-              <h3>Mulai serius di web</h3>
-              <p>Belajar fundamental HTML, CSS, JavaScript lewat proyek nyata dan kontribusi open source.</p>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============ CONTACT ============ -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="contact-wrap" data-reveal>
-          <div class="contact-copy">
-            <p class="eyebrow">05 — Kontak</p>
-            <h2 class="section-title">Punya ide? Mari kita wujudkan.</h2>
-            <p class="muted">
-              Saya terbuka untuk proyek freelance, kolaborasi, atau sekadar ngobrol soal web.
-              Balasan biasanya dalam 1×24 jam.
-            </p>
-
-            <ul class="contact-list">
-              <li>
-                <span class="ci" aria-hidden="true">✉</span>
-                <a href="mailto:hello@traya.dev">hello@traya.dev</a>
-              </li>
-              <li>
-                <span class="ci" aria-hidden="true">in</span>
-                <a href="https://github.com/trayaputra" target="_blank" rel="noopener noreferrer">github.com/trayaputra</a>
-              </li>
-              <li>
-                <span class="ci" aria-hidden="true">◎</span>
-                <span>Indonesia (GMT+7)</span>
-              </li>
-            </ul>
-          </div>
-
-          <form class="contact-form" id="contactForm" novalidate>
-            <div class="field">
-              <label for="name">Nama</label>
-              <input id="name" name="name" type="text" placeholder="Nama kamu" required autocomplete="name" />
-              <small class="err" data-err-for="name"></small>
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" placeholder="nama@email.com" required autocomplete="email" />
-              <small class="err" data-err-for="email"></small>
-            </div>
-            <div class="field">
-              <label for="message">Pesan</label>
-              <textarea id="message" name="message" rows="4" placeholder="Ceritakan sedikit proyek kamu..." required></textarea>
-              <small class="err" data-err-for="message"></small>
-            </div>
-            <button class="btn btn-primary btn-block" type="submit">Kirim Pesan</button>
-            <p class="form-note" id="formNote" role="status" aria-live="polite"></p>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ============ FOOTER ============ -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© <span id="year">2025</span> Traya Putra. Dibangun dengan HTML, CSS, &amp; JavaScript.</p>
-      <a class="to-top" href="#hero">Kembali ke atas <span aria-hidden="true">↑</span></a>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js" defer></script>
-</body>
+    <script>
+      // Terapkan tema tersimpan sebelum paint agar tidak ada "flash" warna.
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          document.documentElement.dataset.theme = saved === "light" ? "light" : "dark";
+        } catch (e) {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
