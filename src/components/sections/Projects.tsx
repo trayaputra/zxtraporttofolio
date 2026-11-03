@@ -7,6 +7,7 @@ import {
 } from "@/data/site";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ProjectThumb } from "@/components/ui/ProjectThumb";
 
 type FilterValue = ProjectCategory | "all";
 
@@ -51,6 +52,17 @@ export function Projects() {
             return (
               <Reveal key={project.id} direction="up" delay={index * 70}>
                 <article className={`project-card ${project.thumb}`}>
+                  {/* Thumbnail gambar — otomatis jatuh ke placeholder gradien
+                      bila file gambar belum di-upload. */}
+                  <ProjectThumb
+                    title={project.title}
+                    icon={Icon}
+                    variant={project.thumb}
+                    image={project.image}
+                    fallback={project.fallbackImage}
+                    ratio={project.thumbRatio ?? "16 / 9"}
+                  />
+
                   <div className="project-card__head">
                     <span className="project-card__index">{project.index}</span>
                     <span className="project-card__tag">{project.tag}</span>

@@ -1,0 +1,189 @@
+/* ============================================================
+   Thumbnail kartu proyek — pelengkap global.css.
+   Dipakai oleh src/components/ui/ProjectThumb.tsx
+   ============================================================ */
+
+.project-thumb {
+  position: relative;
+  margin: -20px -20px 16px; /* full-bleed: menempel tepi .project-card */
+  aspect-ratio: var(--thumb-ratio, 16 / 9);
+  width: calc(100% + 40px);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  isolation: isolate;
+}
+
+/* Gambar asli */
+.project-thumb__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 0.45s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.project-thumb__img.is-ready {
+  opacity: 1;
+  transform: none;
+}
+
+.project-card:hover .project-thumb__img.is-ready {
+  transform: scale(1.05);
+}
+
+/* Skeleton shimmer saat gambar belum selesai dimuat */
+.project-thumb__skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--text) 9%, transparent) 45%,
+      transparent 70%
+    ),
+    var(--surface-2);
+  background-size: 220% 100%, auto;
+  animation: thumb-shimmer 1.35s ease-in-out infinite;
+}
+
+@keyframes thumb-shimmer {
+  0% {
+    background-position: 140% 0, 0 0;
+  }
+  100% {
+    background-position: -60% 0, 0 0;
+  }
+}
+
+/* Placeholder gradien — tampil bila tidak ada gambar sama sekali */
+.project-thumb__placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 100% at 15% 0%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 65%),
+    linear-gradient(140deg, var(--surface-2), var(--surface));
+}
+
+/* Pola grid halus di atas placeholder */
+.project-thumb__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(90% 80% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.project-thumb__badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  color: #fff;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  box-shadow: var(--shadow-md);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover .project-thumb__badge {
+  transform: translateY(-3px) rotate(-4deg);
+}
+
+/* ---- Variasi warna placeholder mengikuti kelas thumb-N di kartu ---- */
+.project-card.thumb-1 .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, rgba(110, 168, 254, 0.55), transparent 65%),
+    linear-gradient(140deg, #16203a, #0e1422);
+}
+.project-card.thumb-1 .project-thumb__badge {
+  background: linear-gradient(140deg, #6ea8fe, #7ef0d0);
+  color: #06121f;
+}
+
+.project-card.thumb-2 .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, rgba(192, 132, 252, 0.5), transparent 65%),
+    linear-gradient(140deg, #241a3d, #14102a);
+}
+.project-card.thumb-2 .project-thumb__badge {
+  background: linear-gradient(140deg, #c084fc, #f472b6);
+}
+
+.project-card.thumb-3 .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, rgba(56, 189, 248, 0.5), transparent 65%),
+    linear-gradient(140deg, #10283a, #0d1a29);
+}
+.project-card.thumb-3 .project-thumb__badge {
+  background: linear-gradient(140deg, #38bdf8, #22d3ee);
+  color: #06121f;
+}
+
+.project-card.thumb-4 .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, rgba(251, 191, 36, 0.45), transparent 65%),
+    linear-gradient(140deg, #33251a, #1f1710);
+}
+.project-card.thumb-4 .project-thumb__badge {
+  background: linear-gradient(140deg, #fbbf24, #f97316);
+  color: #06121f;
+}
+
+.project-card.thumb-5 .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, rgba(52, 211, 153, 0.45), transparent 65%),
+    linear-gradient(140deg, #123026, #0d1f19);
+}
+.project-card.thumb-5 .project-thumb__badge {
+  background: linear-gradient(140deg, #34d399, #10b981);
+  color: #06121f;
+}
+
+.project-card.thumb-6 .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, rgba(167, 139, 250, 0.45), transparent 65%),
+    linear-gradient(140deg, #211d45, #15122e);
+}
+.project-card.thumb-6 .project-thumb__badge {
+  background: linear-gradient(140deg, #a78bfa, #6366f1);
+}
+
+/* ---- Tema terang: placeholder lebih lembut ---- */
+[data-theme="light"] .project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%),
+    linear-gradient(140deg, #ffffff, #eef3fb);
+}
+
+[data-theme="light"] .project-thumb__badge {
+  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, 0.4);
+}
+
+/* ---- Hormati prefers-reduced-motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .project-thumb__skeleton {
+    animation: none;
+  }
+
+  .project-thumb__img,
+  .project-card:hover .project-thumb__img.is-ready,
+  .project-card:hover .project-thumb__badge {
+    transform: none;
+    transition: none;
+  }
+}

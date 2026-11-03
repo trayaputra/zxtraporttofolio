@@ -150,6 +150,17 @@ export interface Project {
   index: string;
   thumb: string;
   icon: LucideIcon;
+  /**
+   * Gambar thumbnail. Bisa path lokal di dalam `public/`
+   * (mis. "images/projects/nama.png") ATAU URL eksternal (https://...).
+   * Kalau dikosongkan / file tidak ada, kartu otomatis memakai
+   * placeholder gradien + ikon — tampilan tetap rapi.
+   */
+  image?: string;
+  /** Sumber cadangan bila `image` gagal dimuat (404 / offline). */
+  fallbackImage?: string;
+  /** Rasio aspek thumbnail, default "16 / 9". Contoh lain: "4 / 3", "21 / 9". */
+  thumbRatio?: string;
   /** URL yang dibuka saat tombol detail diklik. Wajib https/http. */
   url: string;
   /** Label tombol — default "Detail proyek". */
@@ -175,6 +186,13 @@ export const projects: Project[] = [
     index: "01",
     thumb: "thumb-1",
     icon: Sparkles,
+    /* 👇 Ganti dengan screenshot asli Anda:
+       upload file ke public/images/projects/clouvia-ai.png
+       lalu nilai di bawah otomatis terpakai. */
+    image: "images/projects/clouvia-ai.png",
+    fallbackImage:
+      "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=70",
+    thumbRatio: "16 / 9",
     url: "https://clouvia-ai.my.id",
     linkLabel: "Detail proyek",
     external: true,
