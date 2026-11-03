@@ -1,57 +1,89 @@
 # Portofolio — Traya Putra
 
-Website portofolio pribadi, dibuat dengan **HTML, CSS, dan JavaScript murni** (tanpa framework, tanpa build step). Cukup buka `index.html` atau host langsung lewat GitHub Pages.
+Website portofolio pribadi yang dibangun dengan **React 18 + TypeScript + Vite**.
+Seluruh konten terpusat di satu file data, styling memakai CSS murni (tanpa framework CSS).
 
 ## ✨ Fitur
 
-- **Dark / Light mode** — tersimpan di `localStorage`, otomatis mengikuti preferensi sistem.
-- **Responsif** — layout adaptif dari mobile hingga desktop, menu hamburger di layar kecil.
-- **Animasi scroll reveal** — menggunakan `IntersectionObserver`, hemat performa.
-- **Efek typing** pada judul hero dan **counter angka** animasi.
-- **Filter proyek** berdasarkan kategori (Web App / UI / Tools).
-- **Form kontak** dengan validasi inline + kirim via `mailto:`.
+- **Dark / Light mode** — tersimpan di `localStorage`, mengikuti preferensi sistem, tanpa "flash" warna saat load (script inline di `index.html`).
+- **Responsif** — layout adaptif mobile → desktop, navigasi mobile di layar kecil.
+- **Animasi scroll reveal** — `IntersectionObserver` lewat hook `useInView`, hemat performa.
+- **Efek typing** pada judul hero dan **counter angka** animasi (`useCountUp`).
+- **Filter proyek** berdasarkan kategori, dihitung dengan `useMemo`.
+- **Form kontak** dengan validasi inline + kirim via `mailto:` (tanpa backend).
 - **Aksesibilitas** — skip link, `aria-*`, navigasi keyboard, dan dukungan `prefers-reduced-motion`.
-- **Progress bar** baca di atas halaman + indikator section aktif di navbar.
+- **Progress bar** baca di atas halaman + indikator section aktif di navbar (`useScrollProgress`, `useActiveSection`).
 - **SEO & social meta** (Open Graph, theme-color, favicon SVG).
 
 ## 📁 Struktur
 
 ```
 .
-├── index.html
-├── assets/
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   └── main.js
-│   └── img/
-│       └── favicon.svg
-└── README.md
+├── index.html                  # entry Vite + meta & anti-flash theme
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── main.tsx                # bootstrap React
+│   ├── App.tsx                 # susunan halaman
+│   ├── data/
+│   │   └── site.ts             # SEMUA konten: profil, skill, proyek, pengalaman, kontak
+│   ├── hooks/
+│   │   ├── useTheme.ts
+│   │   ├── useInView.ts
+│   │   ├── useCountUp.ts
+│   │   ├── useScrollProgress.ts
+│   │   └── useActiveSection.ts
+│   ├── components/
+│   │   ├── layout/             # Navbar, Footer
+│   │   ├── sections/           # Hero, About, Skills, Projects, Experience, Contact
+│   │   └── ui/                 # Reveal, ThemeToggle, ScrollProgress, SkipLink, BackToTop, SectionHeader
+│   ├── styles/
+│   │   └── global.css          # design token + seluruh styling
+│   └── vite-env.d.ts
+├── tsconfig.json
+└── vite.config.ts
 ```
 
 ## 🚀 Menjalankan
 
-Buka file `index.html` langsung di browser:
+Butuh Node.js 18+.
 
 ```bash
-# atau jalankan server statis lokal
-npx serve .
+npm install
+npm run dev        # server dev di http://localhost:5173
+```
+
+Perintah lain:
+
+```bash
+npm run typecheck  # tsc --noEmit
+npm run build      # typecheck + build produksi ke dist/
+npm run preview    # pratinjau hasil build
 ```
 
 ## 🎨 Kustomisasi
 
 | Yang ingin diubah | Lokasi |
 | --- | --- |
-| Warna, radius, font | `assets/css/style.css` → blok `:root` |
-| Nama, deskripsi, proyek | `index.html` |
-| Kata-kata efek typing | `assets/js/main.js` → variabel `words` |
-| Alamat email kontak | `index.html` & `assets/js/main.js` (`mailto:`) |
+| Nama, role, tagline, tentang, lokasi | `src/data/site.ts` |
+| Daftar proyek & filter kategori | `src/data/site.ts` → `projects`, `projectFilters` |
+| Skill, pengalaman, kontak | `src/data/site.ts` → `skills`, `experiences`, `contactItems` |
+| Kata-kata efek typing | `src/data/site.ts` → `profile.typing` |
+| Warna, radius, font, spacing | `src/styles/global.css` → blok `:root` |
+| Meta SEO & judul halaman | `index.html` |
 
-## 📦 Deploy ke GitHub Pages
+## 📦 Deploy
 
-1. Buka **Settings → Pages** di repository.
-2. Pada *Source*, pilih branch `main` dan folder `/ (root)`.
-3. Simpan, lalu akses `https://<username>.github.io/<repo>/`.
+**Vercel** — framework terdeteksi otomatis sebagai Vite:
+
+| Setting | Nilai |
+| --- | --- |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+| Install Command | `npm install` |
+
+**GitHub Pages** — `base: "./"` di `vite.config.ts` membuat hasil build bisa dibuka dari sub-folder.
+Jalankan `npm run build`, lalu publikasikan isi folder `dist/`.
 
 ## 📄 Lisensi
 

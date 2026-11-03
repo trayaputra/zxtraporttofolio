@@ -1,4 +1,4 @@
-import { Github, Mail, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { contactItems, navLinks, profile } from "@/data/site";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import type { Theme } from "@/hooks/useTheme";
