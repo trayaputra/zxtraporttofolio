@@ -22,6 +22,9 @@ import {
    Seluruh konten situs dikumpulkan di sini supaya mudah diubah.
    ============================================================ */
 
+/** Email publik portofolio — dipakai di About, Contact, Footer, dan form mailto. */
+export const EMAIL = "putrakurniawan@mui.skin";
+
 export interface Profile {
   name: string;
   role: string;
@@ -44,7 +47,7 @@ export const profile: Profile = {
   role: "Web Developer & UI Engineer",
   tagline:
     "Web developer yang fokus pada antarmuka cepat, aksesibel, dan enak dipakai. Suka merapikan detail kecil sampai produk terasa mulus.",
-  email: "hello@traya.dev",
+  email: EMAIL,
   github: "github.com/trayaputra",
   githubUrl: "https://github.com/trayaputra",
   location: "Indonesia (GMT+7)",
@@ -215,7 +218,7 @@ export interface ContactItem {
 }
 
 export const contactItems: ContactItem[] = [
-  { icon: Mail, label: "hello@traya.dev", href: "mailto:hello@traya.dev" },
+  { icon: Mail, label: EMAIL, href: `mailto:${EMAIL}` },
   {
     icon: Github,
     label: "github.com/trayaputra",
