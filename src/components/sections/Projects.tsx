@@ -46,6 +46,8 @@ export function Projects() {
         <div className="projects__grid">
           {visible.map((project, index) => {
             const Icon = project.icon;
+            const external = project.external ?? false;
+
             return (
               <Reveal key={project.id} direction="up" delay={index * 70}>
                 <article className={`project-card ${project.thumb}`}>
@@ -67,10 +69,17 @@ export function Projects() {
                     ))}
                   </ul>
 
-                  <span className="project-card__more">
-                    Detail proyek
+                  <a
+                    className="project-card__more"
+                    href={project.url}
+                    {...(external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    aria-label={`${project.linkLabel ?? "Detail proyek"} ${project.title}`}
+                  >
+                    {project.linkLabel ?? "Detail proyek"}
                     <ArrowUpRight size={15} aria-hidden="true" />
-                  </span>
+                  </a>
                 </article>
               </Reveal>
             );

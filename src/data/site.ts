@@ -147,87 +147,34 @@ export interface Project {
   index: string;
   thumb: string;
   icon: LucideIcon;
+  /** URL yang dibuka saat tombol detail diklik. Wajib https/http. */
+  url: string;
+  /** Label tombol — default "Detail proyek". */
+  linkLabel?: string;
+  /** Buka di tab baru? default true untuk tautan eksternal. */
+  external?: boolean;
 }
 
 export const projectFilters: { value: ProjectCategory | "all"; label: string }[] = [
   { value: "all", label: "Semua" },
   { value: "web", label: "Web App" },
-  { value: "ui", label: "UI / Design" },
-  { value: "tool", label: "Tools" },
 ];
 
 export const projects: Project[] = [
   {
-    id: "kasirku",
-    title: "KasirKu",
+    id: "clouvia-ai",
+    title: "Clouvia AI",
     category: "web",
     tag: "Web App",
     description:
-      "Aplikasi kasir ringan untuk UMKM: transaksi, stok, dan laporan harian dalam satu dashboard.",
-    tech: ["React", "Express", "SQLite"],
+      "Platform berbasis AI untuk membantu pekerjaan sehari-hari: percakapan, pembuatan konten, dan tools produktivitas dalam satu antarmuka web yang ringan.",
+    tech: ["React", "AI", "TypeScript"],
     index: "01",
     thumb: "thumb-1",
-    icon: Layers,
-  },
-  {
-    id: "aurora",
-    title: "Aurora Design System",
-    category: "ui",
-    tag: "UI Kit",
-    description:
-      "Komponen UI yang konsisten, token warna, dan dokumentasi interaktif untuk tim produk.",
-    tech: ["Figma", "CSS Vars", "Storybook"],
-    index: "02",
-    thumb: "thumb-2",
-    icon: Palette,
-  },
-  {
-    id: "bundlelens",
-    title: "BundleLens",
-    category: "tool",
-    tag: "Tool",
-    description:
-      "CLI kecil untuk memantau ukuran bundle dan memberi peringatan saat melebihi budget.",
-    tech: ["Node.js", "esbuild", "CLI"],
-    index: "03",
-    thumb: "thumb-3",
-    icon: Terminal,
-  },
-  {
-    id: "catatan",
-    title: "Catatan Belajar",
-    category: "web",
-    tag: "Web App",
-    description:
-      "PWA untuk mencatat materi belajar, dengan pencarian cepat dan mode offline penuh.",
-    tech: ["Vite", "IndexedDB", "PWA"],
-    index: "04",
-    thumb: "thumb-4",
-    icon: Database,
-  },
-  {
-    id: "nusa",
-    title: "Landing Nusa",
-    category: "ui",
-    tag: "Landing",
-    description:
-      "Landing page agensi travel dengan animasi scroll halus dan skor Lighthouse 98.",
-    tech: ["React", "Framer Motion", "SEO"],
-    index: "05",
-    thumb: "thumb-5",
-    icon: Globe,
-  },
-  {
-    id: "jsonmate",
-    title: "JsonMate",
-    category: "tool",
-    tag: "Tool",
-    description:
-      "Formatter & validator JSON di browser, tanpa server — data tetap di perangkat kamu.",
-    tech: ["TypeScript", "Web API"],
-    index: "06",
-    thumb: "thumb-6",
-    icon: Braces,
+    icon: Sparkles,
+    url: "https://clouvia-ai.my.id",
+    linkLabel: "Detail proyek",
+    external: true,
   },
 ];
 
