@@ -1,0 +1,39 @@
+.click-ripple-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.ripple-effect {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.6) 0%, rgba(59, 130, 246, 0.4) 50%, rgba(236, 72, 153, 0) 100%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-animation 0.6s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes ripple-animation {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(12);
+    opacity: 0;
+  }
+}
+
+/* Dukungan mode gelap/terang atau high contrast */
+@media (prefers-reduced-motion: reduce) {
+  .click-ripple-container {
+    display: none;
+  }
+}

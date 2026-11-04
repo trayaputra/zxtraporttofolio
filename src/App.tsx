@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { SkipLink } from "@/components/ui/SkipLink";
 import { BackToTop } from "@/components/ui/BackToTop";
+import { ClickRippleOverlay } from "@/components/ui/ClickRippleOverlay";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Skills } from "@/components/sections/Skills";
@@ -16,6 +17,7 @@ export default function App() {
 
   return (
     <>
+      <ClickRippleOverlay />
       <ScrollProgress />
       <SkipLink />
       <Navbar theme={theme} onToggleTheme={toggle} />
