@@ -1,0 +1,484 @@
+/* ============================================================
+   LIQUID GLASS — lapisan override di atas global.css
+   ------------------------------------------------------------
+   Konsep:
+   1. Latar belakang terdistorsi (blob + caustics lewat filter SVG).
+   2. Semua panel/card jadi kaca: blur + saturasi + tepi specular.
+   3. Gambar proyek punya lensa distorsi yang mengikuti kursor.
+
+   Catatan teknis:
+   - `backdrop-filter` butuh elemen di atas latar yang bukan solid,
+     karena itu warna --bg dibuat tetap ada tapi blob diberi opacity.
+   - Teks tetap punya kontras tinggi: tint kaca selalu digelapkan.
+   - Semua animasi berat dibatasi prefers-reduced-motion.
+   ============================================================ */
+
+/* ---------- Token kaca ---------- */
+:root,
+[data-theme="dark"] {
+  --glass-tint: rgba(11, 17, 29, 0.46);
+  --glass-tint-strong: rgba(11, 17, 29, 0.66);
+  --glass-tint-hover: rgba(14, 22, 38, 0.6);
+  --glass-sheen:
+    radial-gradient(130% 100% at 8% -12%, rgba(255, 255, 255, 0.16), transparent 56%),
+    linear-gradient(158deg, rgba(255, 255, 255, 0.07), transparent 42%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04), transparent 30%);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-hover: rgba(160, 205, 255, 0.5);
+  --glass-shadow:
+    0 24px 60px -28px rgba(1, 4, 12, 0.86),
+    0 2px 10px -4px rgba(1, 4, 12, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  --glass-blur: 18px;
+  --glass-sat: 170%;
+  --glass-radius: 18px;
+}
+
+[data-theme="light"] {
+  --glass-tint: rgba(255, 255, 255, 0.5);
+  --glass-tint-strong: rgba(255, 255, 255, 0.68);
+  --glass-tint-hover: rgba(255, 255, 255, 0.62);
+  --glass-sheen:
+    radial-gradient(130% 100% at 8% -12%, rgba(255, 255, 255, 0.9), transparent 58%),
+    linear-gradient(158deg, rgba(255, 255, 255, 0.55), transparent 44%),
+    linear-gradient(0deg, rgba(15, 23, 42, 0.04), transparent 30%);
+  --glass-border: rgba(15, 23, 42, 0.12);
+  --glass-border-hover: rgba(37, 99, 235, 0.45);
+  --glass-shadow:
+    0 26px 60px -30px rgba(15, 23, 42, 0.35),
+    0 2px 10px -6px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(15, 23, 42, 0.05);
+  --glass-blur: 16px;
+  --glass-sat: 150%;
+}
+
+/* ---------- 1. Latar belakang terdistorsi ---------- */
+.liquid-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Glow lama di body dimatikan — lapisan baru sudah punya gradien sendiri */
+body::before {
+  content: none;
+}
+
+.liquid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+  transition: background-color 0.35s ease;
+}
+
+.liquid-bg__base {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(55rem 40rem at 78% -12%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 68%),
+    radial-gradient(48rem 38rem at 6% 12%, color-mix(in srgb, var(--accent-2) 20%, transparent), transparent 70%),
+    linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-alt) 60%, transparent));
+}
+
+/* Massa cair: masing-masing blob diberi filter displasemen */
+.liquid-bg__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: url(#liquid-warp) blur(6px);
+  opacity: 0.9;
+  will-change: transform;
+}
+
+.liquid-bg__blob--1 {
+  width: 62vmax;
+  height: 62vmax;
+  top: -24vmax;
+  right: -18vmax;
+  background: radial-gradient(
+    circle at 32% 30%,
+    color-mix(in srgb, var(--accent) 78%, transparent),
+    color-mix(in srgb, var(--accent) 22%, transparent) 55%,
+    transparent 72%
+  );
+  animation: liquid-drift-a 46s ease-in-out infinite alternate;
+}
+
+.liquid-bg__blob--2 {
+  width: 54vmax;
+  height: 54vmax;
+  bottom: -26vmax;
+  left: -16vmax;
+  background: radial-gradient(
+    circle at 60% 40%,
+    color-mix(in srgb, var(--accent-2) 70%, transparent),
+    color-mix(in srgb, var(--accent-2) 18%, transparent) 58%,
+    transparent 74%
+  );
+  animation: liquid-drift-b 58s ease-in-out infinite alternate;
+}
+
+.liquid-bg__blob--3 {
+  width: 40vmax;
+  height: 40vmax;
+  top: 34%;
+  left: 46%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(192, 132, 252, 0.55),
+    rgba(99, 102, 241, 0.18) 60%,
+    transparent 76%
+  );
+  animation: liquid-drift-c 72s ease-in-out infinite alternate;
+}
+
+.liquid-bg__blob--4 {
+  width: 46vmax;
+  height: 46vmax;
+  top: -12vmax;
+  left: 22%;
+  background: radial-gradient(
+    circle at 45% 55%,
+    color-mix(in srgb, var(--accent) 40%, transparent),
+    transparent 70%
+  );
+  opacity: 0.6;
+  animation: liquid-drift-d 64s ease-in-out infinite alternate;
+}
+
+/* Pantulan cahaya di dalam "kaca" */
+.liquid-bg__caustics {
+  position: absolute;
+  inset: -15%;
+  background:
+    repeating-conic-gradient(
+      from 40deg at 30% 30%,
+      rgba(255, 255, 255, 0.1) 0deg 6deg,
+      transparent 6deg 22deg
+    ),
+    repeating-conic-gradient(
+      from 210deg at 72% 66%,
+      rgba(255, 255, 255, 0.07) 0deg 5deg,
+      transparent 5deg 26deg
+    );
+  filter: url(#liquid-caustic) blur(3px);
+  mix-blend-mode: soft-light;
+  opacity: 0.85;
+  animation: liquid-breathe 22s ease-in-out infinite alternate;
+}
+
+/* Grain halus supaya gradien tidak belang */
+.liquid-bg__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+.liquid-bg__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 40%, transparent 40%, color-mix(in srgb, var(--bg) 72%, transparent) 100%);
+}
+
+@keyframes liquid-drift-a {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-7vmax, 5vmax, 0) scale(1.12) rotate(9deg);
+  }
+  100% {
+    transform: translate3d(4vmax, 9vmax, 0) scale(0.96) rotate(-6deg);
+  }
+}
+
+@keyframes liquid-drift-b {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(8vmax, -6vmax, 0) scale(1.14) rotate(-11deg);
+  }
+  100% {
+    transform: translate3d(-5vmax, -3vmax, 0) scale(1) rotate(7deg);
+  }
+}
+
+@keyframes liquid-drift-c {
+  0% {
+    transform: translate3d(-4vmax, 3vmax, 0) scale(0.94) rotate(6deg);
+  }
+  100% {
+    transform: translate3d(6vmax, -8vmax, 0) scale(1.16) rotate(-9deg);
+  }
+}
+
+@keyframes liquid-drift-d {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-9vmax, 7vmax, 0) scale(1.2);
+  }
+}
+
+@keyframes liquid-breathe {
+  0% {
+    opacity: 0.55;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1.08) rotate(4deg);
+  }
+}
+
+/* ---------- 2. Panel kaca ----------
+   Daftar selektor sengaja eksplisit: semua kartu yang tadinya solid
+   (--surface) sekarang jadi kaca, tanpa mengubah komponennya. */
+.pill,
+.filters,
+.chip,
+.project-card,
+.skill-card,
+.fact,
+.about__card,
+.contact__card,
+.contact__form,
+.timeline__card,
+.code-card,
+.project-card__tech li,
+.theme-toggle,
+.menu-toggle,
+.back-to-top,
+.field__input {
+  position: relative;
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-tint);
+  background-image: var(--glass-sheen);
+  background-clip: padding-box;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  box-shadow: var(--glass-shadow);
+}
+
+/* Tepi atas lebih terang → ilusi pembiasan tepi kaca */
+.pill,
+.chip,
+.filters,
+.project-card,
+.skill-card,
+.fact,
+.about__card,
+.contact__card,
+.contact__form,
+.timeline__card,
+.code-card {
+  overflow: hidden;
+}
+
+.project-card,
+.skill-card,
+.about__card,
+.contact__card,
+.contact__form,
+.timeline__card,
+.code-card {
+  border-radius: var(--glass-radius);
+}
+
+/* Elemen kecil: kaca lebih tipis, blur dikecilkan agar tetap tajam */
+.pill,
+.chip,
+.project-card__tech li,
+.theme-toggle,
+.menu-toggle,
+.back-to-top,
+.filters,
+.field__input {
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  box-shadow:
+    0 8px 24px -16px rgba(1, 4, 12, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+/* Hover: kaca "menebal" dan tepinya menangkap cahaya */
+.project-card:hover,
+.skill-card:hover,
+.timeline__card:hover {
+  background-color: var(--glass-tint-hover);
+  border-color: var(--glass-border-hover);
+  box-shadow:
+    0 34px 70px -30px rgba(1, 4, 12, 0.9),
+    0 0 0 1px color-mix(in srgb, var(--accent) 26%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Garis aksen atas kartu proyek → gradien kaca tipis */
+.project-card::before {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    color-mix(in srgb, var(--accent) 70%, transparent),
+    transparent
+  );
+  opacity: 0.7;
+}
+
+/* Navbar: kaca penuh saat scroll */
+.navbar.is-scrolled {
+  background: color-mix(in srgb, var(--glass-tint-strong) 92%, transparent);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  border-bottom-color: var(--glass-border);
+  box-shadow:
+    0 18px 40px -28px rgba(1, 4, 12, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Menu mobile juga kaca */
+.nav-links.is-open {
+  background: var(--glass-tint-strong);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Footer & section alternatif: jangan menutup latar cair */
+.section--alt {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--bg-alt) 42%, transparent) 14%,
+    color-mix(in srgb, var(--bg-alt) 42%, transparent) 86%,
+    transparent
+  );
+}
+
+.footer {
+  background: color-mix(in srgb, var(--glass-tint) 70%, transparent);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border-top: 1px solid var(--glass-border);
+}
+
+/* Tombol utama: kaca berwarna, bukan blok solid */
+.btn--primary {
+  background-color: color-mix(in srgb, var(--accent) 82%, transparent);
+  background-image:
+    radial-gradient(120% 100% at 12% -20%, rgba(255, 255, 255, 0.45), transparent 60%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 16px 34px -18px color-mix(in srgb, var(--accent) 70%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn--ghost {
+  background-color: var(--glass-tint);
+  background-image: var(--glass-sheen);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  border-color: var(--glass-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.btn--ghost:hover {
+  border-color: var(--glass-border-hover);
+}
+
+/* Panel dalam kartu (bar kode, dsb.) tetap kaca tapi lebih gelap */
+.code-card__bar {
+  background: color-mix(in srgb, var(--glass-tint-strong) 80%, transparent);
+  border-bottom-color: var(--glass-border);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Kartu proyek: thumbnail tidak lagi solid supaya kaca terlihat */
+.project-thumb {
+  background: transparent;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.project-thumb__placeholder {
+  background:
+    radial-gradient(120% 100% at 15% 0%, color-mix(in srgb, var(--accent) 40%, transparent), transparent 62%),
+    color-mix(in srgb, var(--glass-tint-strong) 70%, transparent);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  backdrop-filter: blur(8px) saturate(150%);
+}
+
+/* Badge & ikon: kaca berwarna dengan tepi terang */
+.project-card__icon,
+.skill-card__icon,
+.fact__icon,
+.brand__mark,
+.project-thumb__badge {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 12px 26px -16px rgba(1, 4, 12, 0.8);
+}
+
+/* ---------- 3. Kompatibilitas: browser tanpa backdrop-filter ---------- */
+@supports not (backdrop-filter: blur(1px)) {
+  .project-card,
+  .skill-card,
+  .fact,
+  .about__card,
+  .contact__card,
+  .contact__form,
+  .timeline__card,
+  .code-card,
+  .pill,
+  .chip,
+  .filters {
+    background-color: color-mix(in srgb, var(--surface) 92%, transparent);
+  }
+}
+
+/* ---------- 4. Hormati prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-bg__blob,
+  .liquid-bg__caustics {
+    animation: none !important;
+  }
+
+  .project-card:hover {
+    transform: none;
+  }
+}
+
+/* ---------- 5. Penyesuaian layar kecil ---------- */
+@media (max-width: 720px) {
+  :root {
+    --glass-blur: 14px;
+  }
+
+  .liquid-bg__blob--3,
+  .liquid-bg__blob--4 {
+    display: none; /* hemat GPU di perangkat mobile */
+  }
+}
