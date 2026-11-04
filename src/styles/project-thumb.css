@@ -1,189 +1,311 @@
-/* ============================================================
-   Thumbnail kartu proyek — pelengkap global.css.
-   Dipakai oleh src/components/ui/ProjectThumb.tsx
-   ============================================================ */
+/* ===== project-thumb.css — lensa distorsi & foto liquid glass =====
+ * Prefiks `lgt-` (thumb) dan `lgp-` (photo) sengaja berbeda dari `lg-`
+ * di liquid-glass.css agar tidak ada aturan yang saling menimpa.
+ * ================================================================== */
 
-.project-thumb {
-  position: relative;
-  margin: -20px -20px 16px; /* full-bleed: menempel tepi .project-card */
-  aspect-ratio: var(--thumb-ratio, 16 / 9);
-  width: calc(100% + 40px);
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
-  isolation: isolate;
+/* --- Override global ringan --- */
+body::before {
+  display: none; /* glow lama digantikan .lg-bg */
 }
 
-/* Gambar asli */
-.project-thumb__img {
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Thumbnail proyek ===== */
+.lgt-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  isolation: isolate;
+  background: linear-gradient(140deg, #1b2740, #10192b 55%, #17203a);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  contain: paint;
+}
+
+.lgt-media {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.02);
-  transition:
-    opacity 0.45s ease,
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 1;
+  transform: scale(1.06);
+  transition: opacity 0.7s var(--ease-out), transform 1.4s var(--ease-out),
+    filter 0.6s ease;
+  filter: saturate(1.05) contrast(1.02);
 }
 
-.project-thumb__img.is-ready {
+.lgt-media--loaded {
   opacity: 1;
-  transform: none;
 }
 
-.project-card:hover .project-thumb__img.is-ready {
-  transform: scale(1.05);
+.lgt-frame--active .lgt-media {
+  transform: scale(1.12);
+  filter: saturate(1.18) contrast(1.05) brightness(0.92);
 }
 
-/* Skeleton shimmer saat gambar belum selesai dimuat */
-.project-thumb__skeleton {
+/* --- Lensa --- */
+.lgt-lens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.35s ease, scale 0.45s var(--ease-out);
+  scale: 0.6;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22),
+    0 0 34px rgba(34, 211, 238, 0.22), 0 18px 44px rgba(0, 0, 0, 0.45),
+    inset 0 0 26px rgba(255, 255, 255, 0.12);
+  backdrop-filter: brightness(1.08) saturate(1.35);
+  -webkit-backdrop-filter: brightness(1.08) saturate(1.35);
+}
+
+.lgt-frame--active .lgt-lens {
+  opacity: 1;
+  scale: 1;
+}
+
+.lgt-lens__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.lgt-lens__img {
+  display: block;
+  object-fit: cover;
+  max-width: none;
+}
+
+.lgt-lens__glare {
   position: absolute;
   inset: 0;
-  z-index: 0;
-  background:
-    linear-gradient(
-      100deg,
-      transparent 20%,
-      color-mix(in srgb, var(--text) 9%, transparent) 45%,
-      transparent 70%
+  border-radius: 50%;
+  background: radial-gradient(
+      circle at 32% 26%,
+      rgba(255, 255, 255, 0.34),
+      transparent 58%
     ),
-    var(--surface-2);
-  background-size: 220% 100%, auto;
-  animation: thumb-shimmer 1.35s ease-in-out infinite;
+    conic-gradient(
+      from 200deg,
+      rgba(34, 211, 238, 0.18),
+      rgba(167, 139, 250, 0.2),
+      rgba(251, 113, 133, 0.14),
+      rgba(34, 211, 238, 0.18)
+    );
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  pointer-events: none;
 }
 
-@keyframes thumb-shimmer {
-  0% {
-    background-position: 140% 0, 0 0;
-  }
-  100% {
-    background-position: -60% 0, 0 0;
-  }
-}
-
-/* Placeholder gradien — tampil bila tidak ada gambar sama sekali */
-.project-thumb__placeholder {
+/* --- Kilau permukaan & tepi kaca --- */
+.lgt-glare {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.16) 46%,
+    rgba(255, 255, 255, 0.04) 54%,
+    transparent 68%
+  );
+  background-size: 280% 100%;
+  background-position: 120% 0;
+  opacity: 0;
+  transition: opacity 0.4s ease, background-position 1.1s var(--ease-out);
+}
+
+.lgt-frame--active .lgt-glare {
+  opacity: 1;
+  background-position: -40% 0;
+}
+
+.lgt-edge {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -22px 40px rgba(6, 10, 20, 0.4);
+}
+
+/* --- Fallback tanpa gambar --- */
+.lgt-fallback {
+  position: absolute;
+  inset: 0;
   display: grid;
-  place-items: center;
-  background:
-    radial-gradient(120% 100% at 15% 0%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 65%),
-    linear-gradient(140deg, var(--surface-2), var(--surface));
+  place-content: center;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1.25rem;
 }
 
-/* Pola grid halus di atas placeholder */
-.project-thumb__grid {
+.lgt-grid {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 22px 22px;
-  mask-image: radial-gradient(90% 80% at 50% 40%, #000 30%, transparent 100%);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
 }
 
-.project-thumb__badge {
+.lgt-fallback__mark {
   position: relative;
   display: grid;
   place-items: center;
-  width: 58px;
-  height: 58px;
-  border-radius: 16px;
-  color: #fff;
-  background: linear-gradient(140deg, var(--accent), var(--accent-2));
-  box-shadow: var(--shadow-md);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #eaf4ff;
+  background: linear-gradient(140deg, rgba(34, 211, 238, 0.35), rgba(99, 102, 241, 0.4));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-.project-card:hover .project-thumb__badge {
-  transform: translateY(-3px) rotate(-4deg);
+.lgt-fallback__label {
+  position: relative;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
 }
 
-/* ---- Variasi warna placeholder mengikuti kelas thumb-N di kartu ---- */
-.project-card.thumb-1 .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, rgba(110, 168, 254, 0.55), transparent 65%),
-    linear-gradient(140deg, #16203a, #0e1422);
-}
-.project-card.thumb-1 .project-thumb__badge {
-  background: linear-gradient(140deg, #6ea8fe, #7ef0d0);
-  color: #06121f;
-}
-
-.project-card.thumb-2 .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, rgba(192, 132, 252, 0.5), transparent 65%),
-    linear-gradient(140deg, #241a3d, #14102a);
-}
-.project-card.thumb-2 .project-thumb__badge {
-  background: linear-gradient(140deg, #c084fc, #f472b6);
+.lgt-hint {
+  position: absolute;
+  z-index: 6;
+  left: 12px;
+  bottom: 12px;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #e6f1ff;
+  background: rgba(12, 18, 32, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.project-card.thumb-3 .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, rgba(56, 189, 248, 0.5), transparent 65%),
-    linear-gradient(140deg, #10283a, #0d1a29);
-}
-.project-card.thumb-3 .project-thumb__badge {
-  background: linear-gradient(140deg, #38bdf8, #22d3ee);
-  color: #06121f;
+/* ===== Foto profil (hero) — lensa otomatis berputar, tanpa JS ===== */
+.lgp-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  isolation: isolate;
 }
 
-.project-card.thumb-4 .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, rgba(251, 191, 36, 0.45), transparent 65%),
-    linear-gradient(140deg, #33251a, #1f1710);
-}
-.project-card.thumb-4 .project-thumb__badge {
-  background: linear-gradient(140deg, #fbbf24, #f97316);
-  color: #06121f;
-}
-
-.project-card.thumb-5 .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, rgba(52, 211, 153, 0.45), transparent 65%),
-    linear-gradient(140deg, #123026, #0d1f19);
-}
-.project-card.thumb-5 .project-thumb__badge {
-  background: linear-gradient(140deg, #34d399, #10b981);
-  color: #06121f;
+.lgp-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.06) contrast(1.03);
+  transition: transform 1.2s var(--ease-out);
 }
 
-.project-card.thumb-6 .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, rgba(167, 139, 250, 0.45), transparent 65%),
-    linear-gradient(140deg, #211d45, #15122e);
-}
-.project-card.thumb-6 .project-thumb__badge {
-  background: linear-gradient(140deg, #a78bfa, #6366f1);
+.lgp-frame:hover .lgp-photo {
+  transform: scale(1.05);
 }
 
-/* ---- Tema terang: placeholder lebih lembut ---- */
-[data-theme="light"] .project-thumb__placeholder {
-  background:
-    radial-gradient(120% 100% at 15% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%),
-    linear-gradient(140deg, #ffffff, #eef3fb);
+.lgp-lens {
+  position: absolute;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.85;
+  animation: lgp-sweep 14s var(--ease-in-out) infinite;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.24),
+    0 0 44px rgba(34, 211, 238, 0.24), inset 0 0 30px rgba(255, 255, 255, 0.14);
+  background: radial-gradient(
+      circle at 34% 28%,
+      rgba(255, 255, 255, 0.3),
+      transparent 56%
+    ),
+    conic-gradient(
+      from 140deg,
+      rgba(34, 211, 238, 0.2),
+      rgba(167, 139, 250, 0.24),
+      rgba(251, 113, 133, 0.16),
+      rgba(34, 211, 238, 0.2)
+    );
+  mix-blend-mode: screen;
+  backdrop-filter: blur(1px) brightness(1.1) saturate(1.3);
+  -webkit-backdrop-filter: blur(1px) brightness(1.1) saturate(1.3);
 }
 
-[data-theme="light"] .project-thumb__badge {
-  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, 0.4);
-}
-
-/* ---- Hormati prefers-reduced-motion ---- */
-@media (prefers-reduced-motion: reduce) {
-  .project-thumb__skeleton {
-    animation: none;
+@keyframes lgp-sweep {
+  0% {
+    top: 12%;
+    left: 8%;
+    scale: 0.8;
   }
+  35% {
+    top: 44%;
+    left: 52%;
+    scale: 1.1;
+  }
+  70% {
+    top: 62%;
+    left: 18%;
+    scale: 0.9;
+  }
+  100% {
+    top: 12%;
+    left: 8%;
+    scale: 0.8;
+  }
+}
 
-  .project-thumb__img,
-  .project-card:hover .project-thumb__img.is-ready,
-  .project-card:hover .project-thumb__badge {
+.lgp-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 62%
+  );
+  background-size: 260% 100%;
+  animation: lgp-glare 7s linear infinite;
+}
+
+@keyframes lgp-glare {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -60% 0;
+  }
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .lgt-lens,
+  .lgt-glare,
+  .lgp-lens,
+  .lgp-glare {
+    display: none;
+  }
+  .lgt-media,
+  .lgp-photo {
     transform: none;
-    transition: none;
   }
 }
